@@ -9,8 +9,7 @@ const INITIAL_STATE = {
 
 export class ContactForm extends Component {
   state = {
-    name: '',
-    number: '',
+    ...INITIAL_STATE,
   };
 
   handleChange = evt => {
@@ -21,12 +20,20 @@ export class ContactForm extends Component {
   handleFormSubmit = e => {
     e.preventDefault();
     const { name, number } = this.state;
+    const { contacts } = this.props;
+    const allContactsNames = contacts.map(contact =>
+      contact.name.toLowerCase()
+    );
 
-    const newContact = { id: nanoid(), name, number };
-
-    this.props.addNewContact(newContact);
-
-    this.reset();
+    if (allContactsNames.includes(name.toLowerCase())) {
+      alert(`${name} already in contacts`);
+      this.reset();
+      return;
+    } else {
+      const newContact = { id: nanoid(), name, number };
+      this.props.addNewContact(newContact);
+      this.reset();
+    }
   };
 
   reset = () => {
@@ -36,15 +43,16 @@ export class ContactForm extends Component {
   render() {
     const userNameId = nanoid();
     const userTelId = nanoid();
+    const { handleFormSubmit, handleChange } = this;
 
     return (
-      <form className={styles.form} onSubmit={this.handleFormSubmit}>
+      <form className={styles.form} onSubmit={handleFormSubmit}>
         <label className={styles.label} htmlFor={userNameId}>
           Name
         </label>
         <input
           className={styles.input}
-          onChange={this.handleChange}
+          onChange={handleChange}
           id={userNameId}
           type="text"
           name="name"
@@ -58,7 +66,7 @@ export class ContactForm extends Component {
         </label>
         <input
           className={styles.input}
-          onChange={this.handleChange}
+          onChange={handleChange}
           id={userTelId}
           type="tel"
           name="number"

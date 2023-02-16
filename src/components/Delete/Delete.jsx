@@ -1,8 +1,8 @@
 import styles from './Delete.module.scss';
 
-export const Delete = () => {
+export const Delete = ({ deleteContact }) => {
   return (
-    <button className={styles.btn} type="button">
+    <button className={styles.btn} type="button" onClick={deleteContact}>
       Delete
     </button>
   );
