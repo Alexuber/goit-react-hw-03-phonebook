@@ -1,5 +1,6 @@
 import styles from './ContactsListItem.module.scss';
 import { Delete } from '../Delete/Delete';
+import PropTypes from 'prop-types';
 
 export const ContactListItem = ({ id, name, number, deleteContact }) => {
   return (
@@ -9,4 +10,11 @@ export const ContactListItem = ({ id, name, number, deleteContact }) => {
       <Delete deleteContact={deleteContact} />
     </li>
   );
+};
+
+ContactListItem.propTypes = {
+  id: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  number: PropTypes.string.isRequired,
+  deleteContact: PropTypes.func.isRequired,
 };

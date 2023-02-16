@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import { nanoid } from 'nanoid';
+import PropTypes, { shape } from 'prop-types';
 import styles from './ContactsForm.module.scss';
 
 const INITIAL_STATE = {
@@ -8,6 +9,16 @@ const INITIAL_STATE = {
 };
 
 export class ContactForm extends Component {
+  static propTypes = {
+    addNewContact: PropTypes.func.isRequired,
+    contacts: PropTypes.arrayOf(
+      shape({
+        id: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
+        number: PropTypes.string.isRequired,
+      })
+    ),
+  };
   state = {
     ...INITIAL_STATE,
   };
