@@ -10,6 +10,7 @@ export const Filter = ({ filter, value }) => {
         name="filter"
         onChange={filter}
         value={value}
+        placeholder="Search..."
       />
     </>
   );

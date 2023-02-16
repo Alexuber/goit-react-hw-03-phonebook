@@ -60,6 +60,7 @@ export class ContactForm extends Component {
           title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
           required
           value={this.state.name}
+          placeholder="Enter name..."
         />
         <label className={styles.label} htmlFor={userTelId}>
           Number
@@ -74,6 +75,7 @@ export class ContactForm extends Component {
           title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
           required
           value={this.state.number}
+          placeholder="Enter phone..."
         />
         <button className={styles.btn} type="submit">
           Add contact
