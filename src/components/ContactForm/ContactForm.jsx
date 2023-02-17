@@ -1,6 +1,5 @@
 import { Component } from 'react';
-import { nanoid } from 'nanoid';
-import PropTypes, { shape } from 'prop-types';
+import PropTypes from 'prop-types';
 import styles from './ContactsForm.module.scss';
 
 const INITIAL_STATE = {
@@ -12,7 +11,7 @@ export class ContactForm extends Component {
   static propTypes = {
     addNewContact: PropTypes.func.isRequired,
     contacts: PropTypes.arrayOf(
-      shape({
+      PropTypes.shape({
         id: PropTypes.string.isRequired,
         name: PropTypes.string.isRequired,
         number: PropTypes.string.isRequired,
@@ -32,17 +31,19 @@ export class ContactForm extends Component {
     e.preventDefault();
     const { name, number } = this.state;
     const { contacts } = this.props;
-    const allContactsNames = contacts.map(contact =>
-      contact.name.toLowerCase()
-    );
+    const normalizedNames = contacts.map(contact => contact.name.toLowerCase());
+    const allTelephones = contacts.map(contact => contact.number);
 
-    if (allContactsNames.includes(name.toLowerCase())) {
+    if (normalizedNames.includes(name.toLowerCase())) {
       alert(`${name} already in contacts`);
       this.reset();
       return;
+    } else if (allTelephones.includes(number)) {
+      alert(`${number} already in contacts`);
+      this.reset();
+      return;
     } else {
-      const newContact = { id: nanoid(), name, number };
-      this.props.addNewContact(newContact);
+      this.props.addNewContact({ ...this.state });
       this.reset();
     }
   };
@@ -52,19 +53,17 @@ export class ContactForm extends Component {
   };
 
   render() {
-    const userNameId = nanoid();
-    const userTelId = nanoid();
     const { handleFormSubmit, handleChange } = this;
 
     return (
       <form className={styles.form} onSubmit={handleFormSubmit}>
-        <label className={styles.label} htmlFor={userNameId}>
+        <label className={styles.label} htmlFor="tel">
           Name
         </label>
         <input
           className={styles.input}
           onChange={handleChange}
-          id={userNameId}
+          id="name"
           type="text"
           name="name"
           pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
@@ -73,13 +72,13 @@ export class ContactForm extends Component {
           value={this.state.name}
           placeholder="Enter name..."
         />
-        <label className={styles.label} htmlFor={userTelId}>
+        <label className={styles.label} htmlFor="tel">
           Number
         </label>
         <input
           className={styles.input}
           onChange={handleChange}
-          id={userTelId}
+          id="tel"
           type="tel"
           name="number"
           pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"

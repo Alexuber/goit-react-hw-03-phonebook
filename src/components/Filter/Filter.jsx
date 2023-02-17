@@ -1,7 +1,7 @@
 import styles from './Filter.module.scss';
 import PropTypes from 'prop-types';
 
-export const Filter = ({ filter, value }) => {
+export const Filter = ({ onChangeFilter, value }) => {
   return (
     <>
       <h3 className={styles.title}>Find contacts by name</h3>
@@ -9,7 +9,7 @@ export const Filter = ({ filter, value }) => {
         className={styles.input}
         type="text"
         name="filter"
-        onChange={filter}
+        onChange={onChangeFilter}
         value={value}
         placeholder="Search..."
       />
@@ -18,6 +18,6 @@ export const Filter = ({ filter, value }) => {
 };
 
 Filter.propTypes = {
-  filter: PropTypes.func.isRequired,
+  onChangeFilter: PropTypes.func.isRequired,
   value: PropTypes.string,
 };

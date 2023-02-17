@@ -2,6 +2,7 @@ import { Component } from 'react';
 import { ContactForm } from 'components/ContactForm/ContactForm';
 import { ContactList } from 'components/ContactsList/ContactsList';
 import { Filter } from 'components/Filter/Filter';
+import { nanoid } from 'nanoid';
 import styles from './Phonebook.module.scss';
 
 const INITIAL_STATE = {
@@ -14,9 +15,10 @@ export class Phonebook extends Component {
     ...INITIAL_STATE,
   };
 
-  addNewContact = contact => {
+  addNewContact = data => {
+    const newContact = { ...data, id: nanoid(8) };
     this.setState(prevState => ({
-      contacts: [...prevState.contacts, contact],
+      contacts: [...prevState.contacts, newContact],
     }));
   };
 
@@ -44,7 +46,7 @@ export class Phonebook extends Component {
       addNewContact,
       changeFilter,
       deleteContact,
-      state: { value, contacts },
+      state: { filter, contacts },
     } = this;
     const filtered = this.getFilteredContacts();
 
@@ -53,7 +55,7 @@ export class Phonebook extends Component {
         <h1 className={styles.title}>Phonebook</h1>
         <ContactForm addNewContact={addNewContact} contacts={contacts} />
         <h2 className={styles.contactsTitle}>Contacts</h2>
-        <Filter filter={changeFilter} value={value} />
+        <Filter onChangeFilter={changeFilter} value={filter} />
         <ContactList contacts={filtered} deleteContact={deleteContact} />
       </section>
     );
