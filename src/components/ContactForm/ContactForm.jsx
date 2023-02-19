@@ -29,23 +29,8 @@ export class ContactForm extends Component {
 
   handleFormSubmit = e => {
     e.preventDefault();
-    const { name, number } = this.state;
-    const { contacts } = this.props;
-    const normalizedNames = contacts.map(contact => contact.name.toLowerCase());
-    const allTelephones = contacts.map(contact => contact.number);
-
-    if (normalizedNames.includes(name.toLowerCase())) {
-      alert(`${name} already in contacts`);
-      this.reset();
-      return;
-    } else if (allTelephones.includes(number)) {
-      alert(`${number} already in contacts`);
-      this.reset();
-      return;
-    } else {
-      this.props.addNewContact({ ...this.state });
-      this.reset();
-    }
+    this.props.addNewContact({ ...this.state });
+    this.reset();
   };
 
   reset = () => {

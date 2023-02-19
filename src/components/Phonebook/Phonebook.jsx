@@ -16,6 +16,18 @@ export class Phonebook extends Component {
   };
 
   addNewContact = data => {
+    const { name, number } = data;
+    const { contacts } = this.state;
+    const normalizedNames = contacts.map(contact => contact.name.toLowerCase());
+    const allTelephones = contacts.map(contact => contact.number);
+
+    if (normalizedNames.includes(name.toLowerCase())) {
+      alert(`${name} already in contacts`);
+      return;
+    } else if (allTelephones.includes(number)) {
+      alert(`${number} already in contacts`);
+      return;
+    }
     const newContact = { ...data, id: nanoid(8) };
     this.setState(prevState => ({
       contacts: [...prevState.contacts, newContact],
