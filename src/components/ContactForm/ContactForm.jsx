@@ -1,81 +1,87 @@
-import { Component } from 'react';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
 import PropTypes from 'prop-types';
 import styles from './ContactsForm.module.scss';
+import { object, string, number } from 'yup';
+
+let schema = object({
+  name: string()
+    .required('Name is required')
+    .min(3, 'Too Short!')
+    .max(24, 'Too Long!')
+    .trim(),
+  number: number()
+    .typeError('Must be a number')
+    .required('Number is required')
+    .positive('Number must be a positive')
+    .integer('Number must be a integer'),
+});
 
 const INITIAL_STATE = {
   name: '',
   number: '',
 };
 
-export class ContactForm extends Component {
-  static propTypes = {
-    addNewContact: PropTypes.func.isRequired,
-    contacts: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired,
-        number: PropTypes.string.isRequired,
-      })
-    ),
-  };
-  state = {
-    ...INITIAL_STATE,
-  };
+const FormError = ({ name }) => {
+  return (
+    <ErrorMessage
+      name={name}
+      component="div"
+      render={message => <p className={styles.FormError}>{message}</p>}
+    />
+  );
+};
 
-  handleChange = evt => {
-    const { name, value } = evt.target;
-    this.setState({ [name]: value });
+export const ContactForm = ({ addNewContact }) => {
+  const handleFormSubmit = (values, { resetForm }) => {
+    addNewContact(values);
+    resetForm();
   };
 
-  handleFormSubmit = e => {
-    e.preventDefault();
-    this.props.addNewContact({ ...this.state });
-    this.reset();
-  };
-
-  reset = () => {
-    this.setState({ ...INITIAL_STATE });
-  };
-
-  render() {
-    const { handleFormSubmit, handleChange } = this;
-
-    return (
-      <form className={styles.form} onSubmit={handleFormSubmit}>
+  return (
+    <Formik
+      initialValues={INITIAL_STATE}
+      onSubmit={handleFormSubmit}
+      validationSchema={schema}
+    >
+      <Form className={styles.form}>
         <label className={styles.label} htmlFor="tel">
           Name
         </label>
-        <input
+        <Field
           className={styles.input}
-          onChange={handleChange}
-          id="name"
-          type="text"
           name="name"
-          pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+          type="text"
+          // pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
           title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-          required
-          value={this.state.name}
           placeholder="Enter name..."
         />
+        <FormError name="name" />
         <label className={styles.label} htmlFor="tel">
           Number
         </label>
-        <input
+        <Field
           className={styles.input}
-          onChange={handleChange}
-          id="tel"
-          type="tel"
           name="number"
-          pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
+          // pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
           title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-          required
-          value={this.state.number}
           placeholder="Enter phone..."
         />
+        <FormError name="number" />
         <button className={styles.btn} type="submit">
           Add contact
         </button>
-      </form>
-    );
-  }
-}
+      </Form>
+    </Formik>
+  );
+};
+
+ContactForm.propTypes = {
+  addNewContact: PropTypes.func.isRequired,
+  contacts: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      number: PropTypes.string.isRequired,
+    })
+  ),
+};

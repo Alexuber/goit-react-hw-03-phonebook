@@ -1,6 +1,6 @@
 import { ContactListItem } from 'components/ContactsListItem/ContactsListItem';
 import styles from './ContactsList.module.scss';
-import PropTypes, { shape } from 'prop-types';
+import PropTypes from 'prop-types';
 
 export const ContactList = ({ contacts, deleteContact }) => {
   return (
@@ -24,7 +24,7 @@ export const ContactList = ({ contacts, deleteContact }) => {
 ContactList.propTypes = {
   deleteContact: PropTypes.func.isRequired,
   contacts: PropTypes.arrayOf(
-    shape({
+    PropTypes.shape({
       id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
       number: PropTypes.string.isRequired,
