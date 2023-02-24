@@ -13,7 +13,9 @@ let schema = object({
     .typeError('Must be a number')
     .required('Number is required')
     .positive('Number must be a positive')
-    .integer('Number must be a integer'),
+    .integer('Number must be a integer')
+    .min(3)
+    .max(6),
 });
 
 const INITIAL_STATE = {
@@ -26,7 +28,7 @@ const FormError = ({ name }) => {
     <ErrorMessage
       name={name}
       component="div"
-      render={message => <p className={styles.FormError}>{message}</p>}
+      render={message => <p className={styles.formError}>{message}</p>}
     />
   );
 };
