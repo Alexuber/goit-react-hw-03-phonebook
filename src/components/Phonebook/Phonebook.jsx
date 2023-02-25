@@ -13,10 +13,10 @@ const INITIAL_STATE = {
 
 export const Phonebook = () => {
   const [contacts, setContacts] = useState(() =>
-    getDataFromLocalStorage('contacts', [])
+    getDataFromLocalStorage('contacts', INITIAL_STATE.contacts)
   );
 
-  const [filter, setFilter] = useState('');
+  const [filter, setFilter] = useState(INITIAL_STATE.filter);
 
   const firstRender = useRef(true);
 
